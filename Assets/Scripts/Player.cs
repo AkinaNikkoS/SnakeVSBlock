@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public Transform SnakeHead;
     public int Health = 3;
     public int Length = 3;
-    public TextMeshPro PointsText;
+    public Text HealthScore;
     
 
     private Vector3 _previousMousePosition;
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         Rigidbody = GetComponent<Rigidbody>();
-        PointsText.SetText(Health.ToString());
+        HealthScore.text = Health.ToString();
     }
     public void Movement()
     {
@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
         {
 
             Vector3 moveSide = Input.mousePosition - _previousMousePosition;
-            moveSide = moveSide.normalized* Speed * Time.deltaTime;
+            moveSide = moveSide.normalized * Speed * Sensitivity * Time.deltaTime;
             Vector3 newPosition = new Vector3(transform.position.x + moveSide.x, 0, transform.position.z + tempVect.z);
             Rigidbody.MovePosition(newPosition);
         }
