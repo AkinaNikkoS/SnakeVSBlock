@@ -14,18 +14,24 @@ public class Player : MonoBehaviour
     public Text HealthScore;
     public int Value;
     public GameResult GameResult;
+    public AudioClip AudioClip;
 
     private Vector3 _previousMousePosition;
     private Rigidbody Rigidbody;
     private Vector3 tempVect = new Vector3(0, 0, 1);
     private SnakeBalls snakeBalls;
+    private AudioSource _audio;
+
+    private void Awake()
+    {
+        _audio = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
         Rigidbody = GetComponent<Rigidbody>();
         HealthScore.text = Health.ToString();
         snakeBalls = GetComponent<SnakeBalls>();
-
     }
     
     private void Update()
@@ -47,8 +53,9 @@ public class Player : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "BallsFood")
+        if (collision.gameObject.tag == "Food")
         {
+            _audio.Play();
             Value = collision.gameObject.GetComponent<BallsFood>().Value;
             Health += Value;
             HealthScore.text = Health.ToString();
@@ -62,6 +69,7 @@ public class Player : MonoBehaviour
         }
         else if (collision.gameObject.tag == "Block")
         {
+            _audio.PlayOneShot(AudioClip);
             Value = collision.gameObject.GetComponent<Block>().Value;
             if (Value >= Health)
             {

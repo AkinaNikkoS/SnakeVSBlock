@@ -10,7 +10,7 @@ public class SnakeBalls : MonoBehaviour
     private List<Vector3> positionSnake = new List<Vector3>();
 
    
-    void Start()
+    private void Awake()
     {
         positionSnake.Add(SnakeHead.position);
     }
@@ -38,9 +38,9 @@ public class SnakeBalls : MonoBehaviour
 
     public void AddBall()
     {
-        Transform circle = Instantiate(SnakeHead, positionSnake[positionSnake.Count - 1], Quaternion.identity, transform);
-        snakeBalls.Add(circle);
-        positionSnake.Add(circle.position);
+        Transform ball = Instantiate(SnakeHead, positionSnake[positionSnake.Count - 1], Quaternion.identity, transform);
+        snakeBalls.Add(ball);
+        positionSnake.Add(ball.position);
     }
 
     public void RemoveBall()
