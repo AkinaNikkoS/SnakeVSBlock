@@ -6,7 +6,6 @@ public class GameResult : MonoBehaviour
     public Player Controls;
     public GameObject Loss;
     public GameObject Win;
-
     public enum State
     {
         Playing,
@@ -52,7 +51,6 @@ public class GameResult : MonoBehaviour
     {
         if (CurrentState != State.Won) return;
         Win.SetActive(false);
-        ReloadLevel();
         _audio.Play();
         CurrentState = State.Playing;
         Controls.enabled = true;

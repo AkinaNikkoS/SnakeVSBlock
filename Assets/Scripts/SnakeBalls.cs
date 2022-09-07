@@ -18,11 +18,11 @@ public class SnakeBalls : MonoBehaviour
     
     void Update()
     {
-        float distance = ((Vector3)SnakeHead.position - positionSnake[0]).magnitude;
+        float distance = (SnakeHead.position - positionSnake[0]).magnitude;
 
         if (distance > BallDiameter)
         {
-            Vector3 direction = ((Vector3)SnakeHead.position - positionSnake[0]).normalized;
+            Vector3 direction = (SnakeHead.position - positionSnake[0]).normalized;
 
             positionSnake.Insert(0, positionSnake[0] + direction * BallDiameter);
             positionSnake.RemoveAt(positionSnake.Count - 1);

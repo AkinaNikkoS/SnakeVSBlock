@@ -7,8 +7,8 @@ public class Player : MonoBehaviour
     public float Speed;
     public float Sensitivity;
     public Transform SnakeHead;
-    public int Health = 3;
-    public int Length = 3;
+    public int Health = 1;
+    public int Length = 1;
     public Text HealthScore;
     public int Value;
     public GameResult GameResult;
@@ -30,20 +30,31 @@ public class Player : MonoBehaviour
         Rigidbody = GetComponent<Rigidbody>();
         HealthScore.text = Health.ToString();
         snakeBalls = GetComponent<SnakeBalls>();
+        Health += Value;
+        HealthScore.text = Health.ToString();
+        for (int i = 0; i < Value; i++)
+        {
+            Length++;
+            snakeBalls.AddBall();
+        }
     }
-    
+   
     private void Update()
-    { 
-        tempVect = tempVect.normalized* Speed * Time.deltaTime;
-        Rigidbody.MovePosition(transform.position + tempVect);
-
+    {
+        tempVect = tempVect.normalized * Speed * Time.deltaTime;
         if (Input.GetMouseButton(0))
         {
-
             Vector3 moveSide = Input.mousePosition - _previousMousePosition;
             moveSide = moveSide.normalized * Speed * Sensitivity * Time.deltaTime;
-            Vector3 newPosition = new Vector3(transform.position.x + moveSide.x, 0, transform.position.z + tempVect.z);
+            float moveX = transform.position.x + moveSide.x;
+            if (0.6 > moveX) moveX = 0.6f;
+            else { if (moveX > 5.4) moveX = 5.4f; } 
+            Vector3 newPosition = new Vector3(moveX, 0, transform.position.z + tempVect.z);
             Rigidbody.MovePosition(newPosition);
+        }
+        else 
+        {
+            Rigidbody.MovePosition(transform.position + tempVect);
         }
 
         _previousMousePosition = Input.mousePosition;
