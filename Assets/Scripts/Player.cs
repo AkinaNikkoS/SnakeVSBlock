@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,8 +71,8 @@ public class Player : MonoBehaviour
             Value = collision.gameObject.GetComponent<Block>().Value;
             if (Value >= Health)
             {
-                GameResult.OnPlayerDied();
                 Rigidbody.velocity = Vector3.zero;
+                GameResult.OnPlayerDied();
             }
             else
             {
