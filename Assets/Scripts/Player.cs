@@ -19,6 +19,11 @@ public class Player : MonoBehaviour
     private Vector3 tempVect = new Vector3(0, 0, 1);
     private SnakeBalls snakeBalls;
     private AudioSource _audio;
+    private float _previousMousePositionX = 0f;
+    private float moveSideX = 0f;
+    private float moveX = 0f;
+    private bool _isWall = false;
+    private bool _isLeft = false;
 
     private void Awake()
     {
@@ -46,20 +51,35 @@ public class Player : MonoBehaviour
         {
             Vector3 moveSide = Input.mousePosition - _previousMousePosition;
             moveSide = moveSide.normalized * Speed * Sensitivity * Time.deltaTime;
-            float moveX = transform.position.x + moveSide.x;
+            moveSideX = Input.mousePosition.x - _previousMousePositionX;
+            moveX = transform.position.x + moveSide.x;
+            
+            if (_isWall == true && _isLeft == true)
+            {
+                if (moveSideX < 0)               
+                moveX = transform.position.x;
+            }
+            if (_isWall == true && _isLeft == false)
+            {
+                if (moveSideX > 0)
+                    moveX = transform.position.x;
+            }
+
             if (0.6 > moveX) moveX = 0.6f;
-            else { if (moveX > 5.4) moveX = 5.4f; } 
+            else { if (moveX > 5.4) moveX = 5.4f; }
             Vector3 newPosition = new Vector3(moveX, 0, transform.position.z + tempVect.z);
             Rigidbody.MovePosition(newPosition);
         }
-        else 
+        else
         {
             Rigidbody.MovePosition(transform.position + tempVect);
         }
 
         _previousMousePosition = Input.mousePosition;
+        _previousMousePositionX = Input.mousePosition.x;
     }
 
+   
     public void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Food")
@@ -101,6 +121,21 @@ public class Player : MonoBehaviour
         else if (collision.gameObject.tag == "Finish")
         {
             GameResult.OnPlayerWon();
+        }
+        else if (collision.gameObject.tag == "Wall")
+        {
+            _isWall = true;
+            if (_previousMousePositionX > Input.mousePosition.x) _isLeft = true;
+            else _isLeft = false;
+        }
+    }
+
+    public void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            _isWall = false;
+            _isLeft = false;
         }
     }
 
