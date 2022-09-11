@@ -8,6 +8,7 @@ public class BallsFood : MonoBehaviour
 
     void Start()
     {
+        Value = Random.Range(1, 5);
         PointsText.SetText(Value.ToString());
     }
 }

@@ -130,6 +130,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "LevelNumber")
+        {
+            GameResult.Level = other.GetComponent<LevelNumber>().Value;
+            Debug.Log(GameResult.Level);
+            GameResult.LevelNumber.text = "Level " + GameResult.Level.ToString();
+        }
+
+    }
+
     public void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.tag == "Wall")

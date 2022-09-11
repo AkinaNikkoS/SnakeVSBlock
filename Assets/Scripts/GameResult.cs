@@ -1,11 +1,14 @@
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameResult : MonoBehaviour
 {
     public Player Controls;
     public GameObject Loss;
     public GameObject Win;
+    public Text LevelNumber;
+    public int Level = 1;
     public enum State
     {
         Playing,
@@ -14,11 +17,13 @@ public class GameResult : MonoBehaviour
     }
 
     private AudioSource _audio;
+    
     public State CurrentState { get; private set; }
 
     private void Awake()
     {
         _audio = GetComponent<AudioSource>();
+        LevelNumber.text = "Level " + Level.ToString();
     }
     public void OnPlayerDied()
     {
@@ -38,26 +43,51 @@ public class GameResult : MonoBehaviour
         Debug.Log("You Won!");
         Win.SetActive(true);
         _audio.Stop();
+        Level++;
+        if (Level > 3)
+        { 
+            Level = 1;
+        }
+        LevelNumber.text = "Level " + Level.ToString();
     }
 
     public void OnPlayerRestart()
     {
         if (CurrentState != State.Loss) return;
         Loss.SetActive(false);
-        ReloadLevel();
+        ReloadLevel(Level);
         _audio.Play();
+        LevelNumber.text = "Level " + Level.ToString();
     }
     public void OnPlayerNextLevel()
     {
         if (CurrentState != State.Won) return;
-        Win.SetActive(false);
-        _audio.Play();
-        CurrentState = State.Playing;
-        Controls.enabled = true;
+        if (Level == 1) ReloadLevel(Level);
+        else
+        {
+            Win.SetActive(false);
+            _audio.Play();
+            CurrentState = State.Playing;
+            Controls.enabled = true;
+        }
     }
 
-    public void ReloadLevel()
+    public void ReloadLevel(int level)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (level == 2)
+        {            
+            SceneManager.LoadScene("Level2");
+            LevelNumber.text = "Level " + level.ToString();
+        }
+        if (level == 3)
+        {
+            SceneManager.LoadScene("Level3");
+            LevelNumber.text = "Level " + level.ToString();
+        }
+        if (level == 1)
+        {
+            SceneManager.LoadScene("Level1");
+            LevelNumber.text = "Level " + level.ToString();
+        }        
     }
 }
