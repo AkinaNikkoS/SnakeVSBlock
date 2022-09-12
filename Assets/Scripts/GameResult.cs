@@ -7,6 +7,8 @@ public class GameResult : MonoBehaviour
     public Player Controls;
     public GameObject Loss;
     public GameObject Win;
+    public GameObject ConfetyLeft;
+    public GameObject ConfetyRight;
     public Text LevelNumber;
     public int Level = 1;
     public enum State
@@ -27,7 +29,7 @@ public class GameResult : MonoBehaviour
     }
     public void OnPlayerDied()
     {
-        if (CurrentState != State.Playing) return;
+        if (CurrentState != State.Playing) return;       
         CurrentState = State.Loss;
         Controls.enabled = false;
         Debug.Log("Game Over!");
@@ -35,9 +37,12 @@ public class GameResult : MonoBehaviour
         _audio.Stop();
     }
 
+
     public void OnPlayerWon()
     {
         if (CurrentState != State.Playing) return;
+        ConfetyLeft.SetActive(true);
+        ConfetyRight.SetActive(true);
         CurrentState = State.Won;
         Controls.enabled = false;
         Debug.Log("You Won!");
@@ -53,7 +58,6 @@ public class GameResult : MonoBehaviour
 
     public void OnPlayerRestart()
     {
-        if (CurrentState != State.Loss) return;
         Loss.SetActive(false);
         ReloadLevel(Level);
         _audio.Play();
@@ -61,6 +65,7 @@ public class GameResult : MonoBehaviour
     }
     public void OnPlayerNextLevel()
     {
+        _audio.Stop();
         if (CurrentState != State.Won) return;
         if (Level == 1) ReloadLevel(Level);
         else
@@ -70,6 +75,9 @@ public class GameResult : MonoBehaviour
             CurrentState = State.Playing;
             Controls.enabled = true;
         }
+
+        ConfetyLeft.SetActive(false);
+        ConfetyRight.SetActive(false);
     }
 
     public void ReloadLevel(int level)
@@ -88,6 +96,6 @@ public class GameResult : MonoBehaviour
         {
             SceneManager.LoadScene("Level1");
             LevelNumber.text = "Level " + level.ToString();
-        }        
+        }
     }
 }
